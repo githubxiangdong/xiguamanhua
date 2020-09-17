@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:xiguamanhua/pages/home/page/xg_home_page.dart';
-import 'package:xiguamanhua/pages/setting/page/xg_setting_page.dart';
-import 'package:xiguamanhua/pages/shujia/page/xg_shujia_page.dart';
-import 'package:xiguamanhua/pages/video/page/xg_video_page.dart';
+import 'package:xiguamanhua/pages/main/page/xg_main_initialze.dart';
 
 class XGMainPage extends StatelessWidget {
   @override
@@ -10,15 +7,13 @@ class XGMainPage extends StatelessWidget {
     return Scaffold(
       body: IndexedStack(
         index: 0,
-        children: <Widget>[
-          XGHomePage(),
-          XGVideoPage(),
-          XGShuJiaPage(),
-          XGSettingPage(),
-        ],
+        children: appPages,
       ),
       bottomNavigationBar: BottomNavigationBar(
-        // items: ,
+        selectedItemColor: Colors.red,
+        unselectedItemColor: Colors.green,
+        type: BottomNavigationBarType.fixed,
+        items: bottomBarItems,
       ),
     );
   }
