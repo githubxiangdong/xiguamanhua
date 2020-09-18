@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:xiguamanhua/common/theme/xg_app_theme.dart';
-import 'package:xiguamanhua/pages/main/page/xg_main_page.dart';
+import 'package:xiguamanhua/routers/xg_app_router.dart';
 
 main() => runApp(MyApp());
 
@@ -11,7 +11,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: XGAppTheme.normalTheme,
-      home: XGMainPage(),
+      routes: XGAPPRouter.routers,
+      initialRoute: XGAPPRouter.initialRoute,
     );
   }
 }

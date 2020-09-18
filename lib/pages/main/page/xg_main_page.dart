@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:xiguamanhua/pages/main/page/xg_main_initialze.dart';
 
 class XGMainPage extends StatefulWidget {
+  static const String routeName = '/';
+  
   @override
   _XGMainPageState createState() => _XGMainPageState();
 }
