@@ -7,6 +7,6 @@ class XGAPPRouter {
 	
 	// 路由配置
 	static final Map<String, WidgetBuilder> routers = {
-			XGMainPage.routeName: (context) => XGMainPage(),
+		XGMainPage.routeName: (context) => XGMainPage(),
 	};
 }
