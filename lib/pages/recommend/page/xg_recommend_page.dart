@@ -31,55 +31,55 @@ class _XGRecommendPageState extends State<XGRecommendPage> {
   ///
   @override
   Widget build(BuildContext context) {
-    return StaggeredGridView.countBuilder(
-      crossAxisCount: 2,
-      mainAxisSpacing: 8.0,
-      crossAxisSpacing: 8.0,
-      padding: const EdgeInsets.all(4.0),
-      itemCount: 10,
-      itemBuilder: (context, index) {
-        return Container(
-          color: Colors.orange,
-        );
-      },
-      staggeredTileBuilder: (int index) {
-        return StaggeredTile.count(1, 1.5);
-      },
+    return Container(
+      margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+      child: StaggeredGridView.countBuilder(
+        crossAxisCount: 2,
+        mainAxisSpacing: 8.0,
+        crossAxisSpacing: 8.0,
+        itemCount: _recommendModels.isNotEmpty ? _recommendModels.length : 0,
+        itemBuilder: (context, index) {
+          return Container(
+            child: _buildItem(),
+          );
+        },
+        staggeredTileBuilder: (int index) {
+          return StaggeredTile.count(1, 1.2);
+        },
+      ),
     );
   }
 
-  Widget _buildContainer() {
+  /// 创建图片item
+  Widget _buildItem() {
     return Container(
-      margin: EdgeInsets.fromLTRB(15, 10, 15, 0),
-      height: 230,
       decoration: BoxDecoration(
         color: Color.fromRGBO(240, 240, 240, 1),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(5),
       ),
       child: Column(
         children: <Widget>[
-          _buildImage(),
-          _buildDescribeContainer(),
+          _buildItemImage(),
+          _buildItemDescribeText(),
         ],
       ),
     );
   }
 
   /// 图片
-  Widget _buildImage() {
+  Widget _buildItemImage() {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(5),
       child: Image.network(
         'https://images.dmzj1.com/tuijian/320_170/200529xinman86.jpg',
-        height: 180,
-        width: double.infinity,
-        fit: BoxFit.fitWidth,
+        height: 140,
+        fit: BoxFit.fitHeight,
       ),
     );
   }
 
   /// 描述内容
-  Widget _buildDescribeContainer() {
+  Widget _buildItemDescribeText() {
     return Container(
       margin: EdgeInsets.fromLTRB(8, 5, 8, 5),
       child: Column(

@@ -17,7 +17,7 @@ class XGRecommendRequest {
       for (int i = 0; i < dataList.length; i++) {
         final json = dataList[i];
         XGRecommendModel model = XGRecommendModel();
-
+        
         if (i == 0) {
           model.categoryId = dic['category_id'];
           model.title = dic['title'] == null ? '其他' : dic['title'];
