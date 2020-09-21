@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:xiguamanhua/pages/recommend/model/xg_recommend_model.dart';
 import 'package:xiguamanhua/pages/recommend/request/xg_recommend_request.dart';
-import 'package:xiguamanhua/widgets/list_view_group.dart';
 
 class XGRecommendPage extends StatefulWidget {
   static const String routeName = '/XGRecommendPage';
