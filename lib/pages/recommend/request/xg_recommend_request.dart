@@ -12,9 +12,9 @@ class XGRecommendRequest {
 
     if (result.isNotEmpty) {
       result.removeAt(0); // 删除第一组数据
-      result.removeLast();
+      // result.removeLast();
     }
-
+    
     // 3. 将数据json转换成model, 将二维数组转换成一维数组
     List<XGRecommendModel> recommends = [];
     for (var dic in result) {

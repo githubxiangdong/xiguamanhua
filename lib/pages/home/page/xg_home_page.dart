@@ -4,15 +4,13 @@ import 'package:xiguamanhua/pages/recommend/page/xg_recommend_page.dart';
 
 class XGHomePage extends StatefulWidget {
   static const String routeName = '/XGHomePage';
-
   @override
   _XGHomePageState createState() => _XGHomePageState();
 }
 
 class _XGHomePageState extends State<XGHomePage> {
   int _currentIndex = 0;
-  BorderRadius _currentRadius = BorderRadius.circular(14);
-
+  
   /// 推荐
   void _onRecommend() {
     if (_currentIndex == 0) return;
@@ -28,7 +26,7 @@ class _XGHomePageState extends State<XGHomePage> {
       _currentIndex = 1;
     });
   }
-
+  
   ///
   @override
   Widget build(BuildContext context) {

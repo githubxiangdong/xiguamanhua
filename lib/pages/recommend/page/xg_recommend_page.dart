@@ -5,14 +5,13 @@ import 'package:xiguamanhua/pages/recommend/request/xg_recommend_request.dart';
 
 class XGRecommendPage extends StatefulWidget {
   static const String routeName = '/XGRecommendPage';
-
   @override
   _XGRecommendPageState createState() => _XGRecommendPageState();
 }
 
 class _XGRecommendPageState extends State<XGRecommendPage> {
   final List<XGRecommendModel> _recommendModels = [];
-
+  
   ///
   @override
   void initState() {
@@ -24,7 +23,7 @@ class _XGRecommendPageState extends State<XGRecommendPage> {
       });
     });
   }
-
+  
   ///
   @override
   Widget build(BuildContext context) {
@@ -104,17 +103,17 @@ class _XGRecommendPageState extends State<XGRecommendPage> {
             children: <Widget>[
               Expanded(
                 child: Text(
-                  model.titleName,
+                  model?.titleName,
                   style: Theme.of(context).textTheme.subtitle1.copyWith(fontWeight: FontWeight.bold),
                   maxLines: 1,
                 ),
               ),
               SizedBox(width: 10),
-              Text('(${model.status})'),
+              Text('(${model?.status})'),
             ],
           ),
           SizedBox(height: 1),
-          Text(model.subTitle, maxLines: 1),
+          // Text(model?.subTitle, maxLines: 1),
         ],
       ),
     );
