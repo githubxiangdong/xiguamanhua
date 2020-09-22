@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:xiguamanhua/pages/detail/page/xg_detail_page.dart';
 import 'package:xiguamanhua/pages/recommend/model/xg_recommend_model.dart';
 import 'package:xiguamanhua/pages/recommend/request/xg_recommend_request.dart';
 
@@ -11,7 +12,12 @@ class XGRecommendPage extends StatefulWidget {
 
 class _XGRecommendPageState extends State<XGRecommendPage> {
   final List<XGRecommendModel> _recommendModels = [];
-  
+
+  /// 点击事件
+  void _onGoToDetailPage() {
+    Navigator.of(context).pushNamed(XGDetailPage.routeName);
+  }
+
   ///
   @override
   void initState() {
@@ -65,23 +71,26 @@ class _XGRecommendPageState extends State<XGRecommendPage> {
     );
   }
 
-  /// 创建图片item
+  /// 创建item
   Widget _buildItem(XGRecommendModel model) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Color.fromRGBO(240, 240, 240, 1),
-        borderRadius: BorderRadius.circular(5),
+    return GestureDetector(
+      child: Container(
+        decoration: BoxDecoration(
+          color: Color.fromRGBO(240, 240, 240, 1),
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: Column(
+          children: <Widget>[
+            _buildItemImage(model),
+            _buildItemDescribeText(model),
+          ],
+        ),
       ),
-      child: Column(
-        children: <Widget>[
-          _buildItemImage(model),
-          _buildItemDescribeText(model),
-        ],
-      ),
+      onTap: () => _onGoToDetailPage(),
     );
   }
 
-  /// 图片
+  /// 创建item图片
   Widget _buildItemImage(XGRecommendModel model) {
     return AspectRatio(
       aspectRatio: 1,
@@ -92,7 +101,7 @@ class _XGRecommendPageState extends State<XGRecommendPage> {
     );
   }
 
-  /// 描述内容
+  /// 创建item描述内容
   Widget _buildItemDescribeText(XGRecommendModel model) {
     return Container(
       margin: EdgeInsets.fromLTRB(8, 7, 8, 5),

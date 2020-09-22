@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:xiguamanhua/pages/detail/page/xg_detail_page.dart';
 import 'package:xiguamanhua/pages/main/page/xg_main_page.dart';
 
 class XGAPPRouter {
@@ -8,5 +9,6 @@ class XGAPPRouter {
 	// 路由配置
 	static final Map<String, WidgetBuilder> routers = {
 		XGMainPage.routeName: (context) => XGMainPage(),
+		XGDetailPage.routeName: (context) => XGDetailPage(),
 	};
 }
