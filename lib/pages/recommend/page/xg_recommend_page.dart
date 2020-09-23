@@ -6,6 +6,7 @@ import 'package:xiguamanhua/pages/recommend/request/xg_recommend_request.dart';
 
 class XGRecommendPage extends StatefulWidget {
   static const String routeName = '/XGRecommendPage';
+
   @override
   _XGRecommendPageState createState() => _XGRecommendPageState();
 }
@@ -14,8 +15,8 @@ class _XGRecommendPageState extends State<XGRecommendPage> {
   final List<XGRecommendModel> _recommendModels = [];
 
   /// 点击事件
-  void _onGoToDetailPage() {
-    Navigator.of(context).pushNamed(XGDetailPage.routeName);
+  void _onGoToDetailPage(int objId) {
+    Navigator.of(context).pushNamed(XGDetailPage.routeName, arguments: objId);
   }
 
   ///
@@ -29,7 +30,7 @@ class _XGRecommendPageState extends State<XGRecommendPage> {
       });
     });
   }
-  
+
   ///
   @override
   Widget build(BuildContext context) {
@@ -63,7 +64,14 @@ class _XGRecommendPageState extends State<XGRecommendPage> {
       padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
       child: Row(
         children: [
-          Container(color: Colors.orange, width: 4, height: 14),
+          Container(
+            width: 4.3,
+            height: 14,
+            decoration: BoxDecoration(
+              color: Colors.orange,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
           SizedBox(width: 5),
           Text(title, style: Theme.of(context).textTheme.subtitle2),
         ],
@@ -86,7 +94,7 @@ class _XGRecommendPageState extends State<XGRecommendPage> {
           ],
         ),
       ),
-      onTap: () => _onGoToDetailPage(),
+      onTap: () =>_onGoToDetailPage(model?.objId),
     );
   }
 

@@ -9,6 +9,16 @@ class XGAPPRouter {
 	// 路由配置
 	static final Map<String, WidgetBuilder> routers = {
 		XGMainPage.routeName: (context) => XGMainPage(),
-		XGDetailPage.routeName: (context) => XGDetailPage(),
+	};
+
+	static final RouteFactory onGenerateRoute = (settings) {
+		if (settings.name == XGDetailPage.routeName) {
+			return MaterialPageRoute(
+					builder: (ctx) {
+						return XGDetailPage(settings.arguments);
+					}
+			);
+		}
+		return null;
 	};
 }

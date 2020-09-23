@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
       theme: XGAppTheme.normalTheme,
       routes: XGAPPRouter.routers,
       initialRoute: XGAPPRouter.initialRoute,
+      onGenerateRoute: XGAPPRouter.onGenerateRoute,
     );
   }
 }
