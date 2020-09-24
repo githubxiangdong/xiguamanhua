@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:xiguamanhua/pages/detail/model/xg_detail_model.dart';
 import 'package:xiguamanhua/pages/detail/request/xg_detail_request.dart';
 
 class XGDetailPage extends StatefulWidget {
@@ -11,12 +12,16 @@ class XGDetailPage extends StatefulWidget {
 }
 
 class _XGDetailPageState extends State<XGDetailPage> {
-
+  XGDetailModel _detailModel;
+  
   @override
   void initState() {
     super.initState();
     // 请求网络
-    XGDetailRequest.requestDetailInfo(widget.manHuaId);
+    XGDetailRequest.requestDetailInfo(widget.manHuaId).then((rsp) {
+      _detailModel = rsp;
+      print('zxd-log 2 ${_detailModel.toString()}');
+    });
   }
 
   ///
