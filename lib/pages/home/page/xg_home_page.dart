@@ -43,11 +43,11 @@ class _XGHomePageState extends State<XGHomePage> {
   /// 构建一个选择器
   Widget _buildChooseSelector() {
     return Container(
-      height: 30,
+      height: 28,
       width: (75.0 * 2),
       decoration: BoxDecoration(
         color: Colors.orange,
-        border: Border.all(width: 2, color: Colors.white),
+        border: Border.all(width: 1, color: Colors.white),
         borderRadius: BorderRadius.circular(15),
       ),
       child: Row(
@@ -56,10 +56,10 @@ class _XGHomePageState extends State<XGHomePage> {
           _buildChooseButton(
             title: '推荐',
             radius: BorderRadius.only(
-              topLeft: Radius.circular(14),
-              bottomLeft: Radius.circular(14),
-              topRight: _currentIndex == 0 ? Radius.circular(14) : Radius.circular(0),
-              bottomRight: _currentIndex == 0 ? Radius.circular(14) : Radius.circular(0),
+              topLeft: Radius.circular(11.5),
+              bottomLeft: Radius.circular(11.5),
+              topRight: _currentIndex == 0 ? Radius.circular(11.5) : Radius.circular(0),
+              bottomRight: _currentIndex == 0 ? Radius.circular(11.5) : Radius.circular(0),
             ),
             selected: _currentIndex == 0 ? true : false,
             onPress: () => _onRecommend(),
@@ -67,10 +67,10 @@ class _XGHomePageState extends State<XGHomePage> {
           _buildChooseButton(
             title: '分类',
             radius: BorderRadius.only(
-              topLeft: _currentIndex == 0 ? Radius.circular(0) : Radius.circular(14),
-              bottomLeft: _currentIndex == 0 ? Radius.circular(0) : Radius.circular(14),
-              topRight: Radius.circular(14),
-              bottomRight: Radius.circular(14),
+              topLeft: _currentIndex == 0 ? Radius.circular(0) : Radius.circular(11.5),
+              bottomLeft: _currentIndex == 0 ? Radius.circular(0) : Radius.circular(11.5),
+              topRight: Radius.circular(11.5),
+              bottomRight: Radius.circular(11.5),
             ),
             selected: _currentIndex == 0 ? false : true,
             onPress: () => _onCategory(),
@@ -83,7 +83,7 @@ class _XGHomePageState extends State<XGHomePage> {
   /// 构建按钮
   Widget _buildChooseButton({String title, BorderRadius radius, bool selected, Function onPress}) {
     return ButtonTheme(
-      height: 24,
+      height: 23,
       minWidth: 72,
       child: FlatButton(
         color: selected ? Colors.white : Colors.orange,

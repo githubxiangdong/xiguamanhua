@@ -19,8 +19,10 @@ class _XGDetailPageState extends State<XGDetailPage> {
     super.initState();
     // 请求网络
     XGDetailRequest.requestDetailInfo(widget.manHuaId).then((rsp) {
-      _detailModel = rsp;
-      print('zxd-log 2 ${_detailModel.toString()}');
+      setState(() {
+        _detailModel = rsp;
+        print('zxd-log**: $rsp');
+      });
     });
   }
 
@@ -29,7 +31,7 @@ class _XGDetailPageState extends State<XGDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('漫画标题'),
+        title: Text(_detailModel == null ? '' : _detailModel?.title),
       ),
       body: _buildDetailLayout(),
     );
@@ -37,6 +39,11 @@ class _XGDetailPageState extends State<XGDetailPage> {
 
   /// 创建详情布局
   Widget _buildDetailLayout() {
+    if (_detailModel == null) {
+      return Center(
+        child: Text('加载中...', style: Theme.of(context).textTheme.subtitle1,),
+      );
+    }
     return CustomScrollView(
       slivers: [
         _buildDetailHeader(),
@@ -57,22 +64,72 @@ class _XGDetailPageState extends State<XGDetailPage> {
         alignment: AlignmentDirectional.center,
         overflow: Overflow.visible,
         children: [
-          Container(
-            height: 165,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Colors.white, Colors.orange],
-              ),
-            ),
-          ),
-          Positioned(
-            left: 30,
-            bottom: -15,
-            height: 160,
-            child: Image.network('https://images.dmzj1.com/webpic/6/wjdnnbblsndsl202092.jpg'),
-          )
+          _buildHeaderBackground(),
+          _buildHeaderContent(),
+        ],
+      ),
+    );
+  }
+
+  /// 创建头部背景
+  Widget _buildHeaderBackground() {
+    return Container(
+      height: 165,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.white, Colors.orange],
+        ),
+      ),
+    );
+  }
+
+  /// 创建头部内容
+  Widget _buildHeaderContent() {
+    return Positioned(
+      left: 30,
+      bottom: -20,
+      height: 165,
+      child: Row(
+        children: [
+          _buildComicsImage(),
+          SizedBox(width: 10),
+          _buildComicsContent(),
+        ],
+      ),
+    );
+  }
+
+  /// 创建图片
+  Widget _buildComicsImage() {
+    return Image.network(_detailModel?.cover);
+  }
+
+  /// 创建详细内容
+  Widget _buildComicsContent() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildContentItem('漫画：', _detailModel?.title),
+        _buildContentItem('作者：', _detailModel?.author),
+        _buildContentItem('类型：', _detailModel?.comicsType),
+        _buildContentItem('状态：', _detailModel?.comicsStatus),
+        _buildContentItem('订阅数量：', _detailModel?.subscribeNum.toString()),
+      ],
+    );
+  }
+
+  /// 创建内容
+  Widget _buildContentItem(String label, String title) {
+    return Container(
+      height: 20,
+      child: Row(
+        children: [
+          Text(label),
+          Text(title, style: Theme.of(context).textTheme.bodyText1.copyWith(
+            color: Color.fromRGBO(80, 80, 80, 1)
+          ),),
         ],
       ),
     );
@@ -113,8 +170,7 @@ class _XGDetailPageState extends State<XGDetailPage> {
       child: Container(
         padding: EdgeInsets.fromLTRB(15, 10, 15, 0),
         child: Expanded(
-          child: Text('欢迎关注「蛇崽网盘教程资源」公众号 ，在微信后台回复「领取资源」，获取IT资源200G干货大全。'
-              '在微信后台回复「Flutter移动电商」，即可免费领取Flutter移动电商系列全套'),
+          child: Text(_detailModel?.description),
         ),
       ),
     );
@@ -125,15 +181,18 @@ class _XGDetailPageState extends State<XGDetailPage> {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (ctx, index) {
-          return _buildChapterItem();
+          if (_detailModel.chapters == null) {
+            return Container();
+          }
+          return _buildChapterItem(_detailModel?.chapters[index]);
         },
-        childCount: 20,
+        childCount: _detailModel.chapters == null ? 0 : _detailModel.chapters.length,
       ),
     );
   }
 
   /// 创建章节item
-  Widget _buildChapterItem() {
+  Widget _buildChapterItem(XGChapterModel model) {
     return Container(
       alignment: Alignment.centerLeft,
       margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
@@ -148,7 +207,7 @@ class _XGDetailPageState extends State<XGDetailPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('第1话 1 话'),
+            Text(model?.chapterTitle),
             Icon(Icons.navigate_next, color: Color.fromRGBO(225, 225, 225, 1),),
           ],
         ),
