@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:xiguamanhua/pages/detail/model/xg_detail_model.dart';
 import 'package:xiguamanhua/pages/detail/request/xg_detail_request.dart';
+import 'package:xiguamanhua/pages/reader/page/xg_reader_page.dart';
 
 class XGDetailPage extends StatefulWidget {
   static const String routeName = '/XGDetailPage';
@@ -14,6 +15,12 @@ class XGDetailPage extends StatefulWidget {
 class _XGDetailPageState extends State<XGDetailPage> {
   XGDetailModel _detailModel;
   
+  ///
+  void _onGoToReaderPage(int chapterId) {
+    // Navigator.of(context).pushNamed(XGReaderPage.routeName, arguments: _detailModel.comicsId, arguments: chapterId.toString());
+  }
+  
+  ///
   @override
   void initState() {
     super.initState();
@@ -36,7 +43,7 @@ class _XGDetailPageState extends State<XGDetailPage> {
       body: _buildDetailLayout(),
     );
   }
-
+  
   /// 创建详情布局
   Widget _buildDetailLayout() {
     if (_detailModel == null) {
@@ -193,25 +200,28 @@ class _XGDetailPageState extends State<XGDetailPage> {
 
   /// 创建章节item
   Widget _buildChapterItem(XGChapterModel model) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
-      height: 44,
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(width: 1, color: Color.fromRGBO(245, 245, 245, 1)),
-        ),
-      ),
+    return GestureDetector(
       child: Container(
-        padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(model?.chapterTitle),
-            Icon(Icons.navigate_next, color: Color.fromRGBO(225, 225, 225, 1),),
-          ],
+        alignment: Alignment.centerLeft,
+        margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
+        height: 44,
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(width: 1, color: Color.fromRGBO(245, 245, 245, 1)),
+          ),
+        ),
+        child: Container(
+          padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(model?.chapterTitle),
+              Icon(Icons.navigate_next, color: Color.fromRGBO(225, 225, 225, 1),),
+            ],
+          ),
         ),
       ),
+      onTap: () => _onGoToReaderPage(model.chapterId),
     );
   }
 }

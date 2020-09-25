@@ -1,7 +1,9 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:xiguamanhua/pages/detail/page/xg_detail_page.dart';
 import 'package:xiguamanhua/pages/recommend/model/xg_recommend_model.dart';
+import 'package:html/parser.dart';
 import 'package:xiguamanhua/pages/recommend/request/xg_recommend_request.dart';
 
 class XGRecommendPage extends StatefulWidget {
@@ -29,6 +31,45 @@ class _XGRecommendPageState extends State<XGRecommendPage> {
         _recommendModels.addAll(rsp);
       });
     });
+
+    // gethttp();
+  }
+
+  void gethttp() async {
+//  var body = "<html><head><title>80页笔记看遍机器学习基本概念、算法、模型，帮新手少走弯路</title></head> <body></body></html>>";
+  
+    //请求HTML数据
+    final url = 'http://www.gugu5.com';
+    var response = await Dio().get(url);
+    print('zxd-log: +++1 $response');
+    //解析返回的数据，类似 val doc = Jsoup.connect(text).get()
+    var document = parse(response.data);
+    print('zxd-log: +++2 $document');
+    
+    //获取html标签，类似val links = doc.select("title")
+    var title = document.querySelector("title");
+    print('zxd-log: +++3 ${title.text}');
+    
+    //获取html body标签，类似 val body = doc.getElementsByTag("body")
+    var body = document.getElementsByTagName("body");
+    print('zxd-log: +++4 ${body}');
+    
+    //下面获取html的图片，暂未找到好的解决办法，使用的最笨的截取
+    var scripts = body[0].getElementsByTagName("script");
+    print('zxd-log: +++5 $scripts');
+    
+    for(int i=0;i< scripts.length;i++){
+      //将获取的html标签转换成String字符串
+      var script = scripts[i].outerHtml.toString();
+      //判断字符串是否包含BASE_DATA
+      if (script.indexOf("BASE_DATA") != -1) {
+        //处理得到image图片
+        var image = script.substring(script.indexOf("coverImg"), script.indexOf("commentInfo:"))
+            .replaceAll("coverImg:", "").replaceAll("\'", "").replaceAll("},", "");
+        
+        print('zxd-log: +++6 $image');
+      }
+    }
   }
 
   ///
