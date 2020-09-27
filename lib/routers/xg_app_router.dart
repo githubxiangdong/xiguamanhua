@@ -20,7 +20,11 @@ class XGAPPRouter {
 		
     if (settings.name == XGReaderPage.routeName) {
       return MaterialPageRoute(builder: (ctx) {
-        return XGReaderPage(settings.arguments, settings.arguments);
+        List argumentsArr = settings.arguments as List;
+        if (argumentsArr.length == 3) {
+          return XGReaderPage(argumentsArr[0], argumentsArr[1], argumentsArr[2]);
+        }
+        return null;
       });
     }
     return null;

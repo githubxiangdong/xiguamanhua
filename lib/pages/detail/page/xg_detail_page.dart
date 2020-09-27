@@ -6,6 +6,7 @@ import 'package:xiguamanhua/pages/reader/page/xg_reader_page.dart';
 class XGDetailPage extends StatefulWidget {
   static const String routeName = '/XGDetailPage';
   final manHuaId;
+
   XGDetailPage(this.manHuaId);
 
   @override
@@ -14,12 +15,15 @@ class XGDetailPage extends StatefulWidget {
 
 class _XGDetailPageState extends State<XGDetailPage> {
   XGDetailModel _detailModel;
-  
+
   ///
   void _onGoToReaderPage(int chapterId) {
-    // Navigator.of(context).pushNamed(XGReaderPage.routeName, arguments: _detailModel.comicsId, arguments: chapterId.toString());
+    Navigator.of(context).pushNamed(
+      XGReaderPage.routeName,
+      arguments: [_detailModel.comicsId, chapterId, _detailModel.title],
+    );
   }
-  
+
   ///
   @override
   void initState() {
@@ -43,12 +47,15 @@ class _XGDetailPageState extends State<XGDetailPage> {
       body: _buildDetailLayout(),
     );
   }
-  
+
   /// 创建详情布局
   Widget _buildDetailLayout() {
     if (_detailModel == null) {
       return Center(
-        child: Text('加载中...', style: Theme.of(context).textTheme.subtitle1,),
+        child: Text(
+          '加载中...',
+          style: Theme.of(context).textTheme.subtitle1,
+        ),
       );
     }
     return CustomScrollView(
@@ -134,9 +141,10 @@ class _XGDetailPageState extends State<XGDetailPage> {
       child: Row(
         children: [
           Text(label),
-          Text(title, style: Theme.of(context).textTheme.bodyText1.copyWith(
-            color: Color.fromRGBO(80, 80, 80, 1)
-          ),),
+          Text(
+            title,
+            style: Theme.of(context).textTheme.bodyText1.copyWith(color: Color.fromRGBO(80, 80, 80, 1)),
+          ),
         ],
       ),
     );
@@ -216,7 +224,10 @@ class _XGDetailPageState extends State<XGDetailPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(model?.chapterTitle),
-              Icon(Icons.navigate_next, color: Color.fromRGBO(225, 225, 225, 1),),
+              Icon(
+                Icons.navigate_next,
+                color: Color.fromRGBO(225, 225, 225, 1),
+              ),
             ],
           ),
         ),
