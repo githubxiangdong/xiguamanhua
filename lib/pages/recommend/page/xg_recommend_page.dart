@@ -20,7 +20,7 @@ class _XGRecommendPageState extends State<XGRecommendPage> {
   void _onGoToDetailPage(int objId) {
     Navigator.of(context).pushNamed(XGDetailPage.routeName, arguments: objId);
   }
-
+  
   ///
   @override
   void initState() {
@@ -37,43 +37,36 @@ class _XGRecommendPageState extends State<XGRecommendPage> {
 
   void gethttp() async {
 //  var body = "<html><head><title>80页笔记看遍机器学习基本概念、算法、模型，帮新手少走弯路</title></head> <body></body></html>>";
-  
+    
     //请求HTML数据
-    final url = 'https://m.gufengmh8.com'; //'http://www.gugu5.com'; // https://m.gufengmh8.com
+    final url = 'https://m.gufengmh8.com';
     var response = await Dio().get(url);
-    var result = json.decode(response.data);
-    print('zxd-log: +++1 $response');
     //解析返回的数据，类似 val doc = Jsoup.connect(text).get()
     var document = parse(response.data);
-    print('zxd-log: +++2 $document');
+    final responseString = document.outerHtml;
+    // print('zxd-log: +++1 $responseString');
     
-    //获取html标签，类似val links = doc.select("title")
-    var title = document.querySelector("title");
-    print('zxd-log: +++3 ${title.text}');
+    // final index = responseString.indexOf('<ul class="nav autoHeight');
+    // print('zxd-log: +++2 $index');
+    // final bodyString = responseString.substring(index);
+    // print('zxd-log: +++3 $bodyString');
     
-    //获取html body标签，类似 val body = doc.getElementsByTag("body")
-    var body = document.getElementsByTagName("body");
-    print('zxd-log: +++4 ${body.toList()}');
-    
-    //下面获取html的图片，暂未找到好的解决办法，使用的最笨的截取
-    var scripts = body[0].getElementsByTagName("script");
-    print('zxd-log: +++5 $scripts');
-    
-    for(int i=0;i< scripts.length;i++){
-      //将获取的html标签转换成String字符串
-      var script = scripts[i].outerHtml.toString();
-      // print('zxd-log: +++6 $script');
-      //判断字符串是否包含BASE_DATA
-      if (script.indexOf("BASE_DATA") != -1) {
-        //处理得到image图片
-        var image = script.substring(script.indexOf("coverImg"), script.indexOf("commentInfo:"))
-            .replaceAll("coverImg:", "").replaceAll("\'", "").replaceAll("},", "");
-        
-        print('zxd-log: +++7 $image');
+    var bodyList = document.getElementsByTagName('body');
+    for (var body in bodyList) {
+      var ulList = body.getElementsByTagName('ul');
+      for (var ul in ulList) {
+        var ulHtml = ul.outerHtml;
+        print('zxd-log +++2: $ulHtml');
+        print('zxd-log +++3: ${ul.getElementsByClassName('nav autoHeight')}');
+        var liList = ul.getElementsByTagName('li');
+        // print('zxd-log +++4: ${liList.toString()}');
+        for (var li in liList) {
+          // print('zxd-log +++5: ${li.text}');
+        }
       }
     }
   }
-
+  
   ///
   @override
   Widget build(BuildContext context) {

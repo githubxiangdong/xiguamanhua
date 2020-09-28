@@ -23,7 +23,7 @@ class _XGDetailPageState extends State<XGDetailPage> {
       arguments: [_detailModel.comicsId, chapterId, _detailModel.title],
     );
   }
-
+  
   ///
   @override
   void initState() {
