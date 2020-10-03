@@ -1,13 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:xiguamanhua/common/model/xg_comics_model.dart';
 import 'package:xiguamanhua/pages/detail/model/xg_detail_model.dart';
 import 'package:xiguamanhua/pages/detail/request/xg_detail_request.dart';
 import 'package:xiguamanhua/pages/reader/page/xg_reader_page.dart';
 
 class XGDetailPage extends StatefulWidget {
   static const String routeName = '/XGDetailPage';
-  final manHuaId;
-
-  XGDetailPage(this.manHuaId);
+  final XGComicsModel model;
+  XGDetailPage(this.model);
 
   @override
   _XGDetailPageState createState() => _XGDetailPageState();
@@ -20,7 +21,7 @@ class _XGDetailPageState extends State<XGDetailPage> {
   void _onGoToReaderPage(int chapterId) {
     Navigator.of(context).pushNamed(
       XGReaderPage.routeName,
-      arguments: [_detailModel.comicsId, chapterId, _detailModel.title],
+      arguments: [_detailModel.comicsId, chapterId, _detailModel.comicsName],
     );
   }
   
@@ -29,10 +30,9 @@ class _XGDetailPageState extends State<XGDetailPage> {
   void initState() {
     super.initState();
     // 请求网络
-    XGDetailRequest.requestDetailInfo(widget.manHuaId).then((rsp) {
+    XGDetailRequest.requestDetailInfo(widget.model.comicsDetailUrl).then((rsp) {
       setState(() {
         _detailModel = rsp;
-        print('zxd-log**: $rsp');
       });
     });
   }
@@ -42,7 +42,7 @@ class _XGDetailPageState extends State<XGDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_detailModel == null ? '' : _detailModel?.title),
+        title: Text(widget.model.comicsName),
       ),
       body: _buildDetailLayout(),
     );
@@ -66,7 +66,7 @@ class _XGDetailPageState extends State<XGDetailPage> {
         _buildProfileContent(),
         _buildSpaceFill(10),
         _buildContentNavigate('章节:'),
-        _buildChapter(),
+        // _buildChapter(),
       ],
     );
   }
@@ -117,7 +117,14 @@ class _XGDetailPageState extends State<XGDetailPage> {
 
   /// 创建图片
   Widget _buildComicsImage() {
-    return Image.network(_detailModel?.cover);
+    return CachedNetworkImage(
+      placeholder: (ctx, url) {
+        return Image.asset('assets/images/other/xg_placeholder_img.png');
+      },
+      imageUrl: _detailModel.comicsCover,
+      fit: BoxFit.fill,
+      httpHeaders: _detailModel.headers,
+    );
   }
 
   /// 创建详细内容
@@ -125,11 +132,11 @@ class _XGDetailPageState extends State<XGDetailPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildContentItem('漫画：', _detailModel?.title),
+        _buildContentItem('漫画：', _detailModel?.comicsName),
         _buildContentItem('作者：', _detailModel?.author),
         _buildContentItem('类型：', _detailModel?.comicsType),
         _buildContentItem('状态：', _detailModel?.comicsStatus),
-        _buildContentItem('订阅数量：', _detailModel?.subscribeNum.toString()),
+        _buildContentItem('更新时间：', _detailModel?.lastUpdateTime),
       ],
     );
   }

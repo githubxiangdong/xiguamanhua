@@ -1,44 +1,34 @@
+import 'package:html/parser.dart';
+import 'package:xiguamanhua/pages/recommend/model/xg_floor_model.dart';
 import 'package:xiguamanhua/pages/recommend/model/xg_recommend_model.dart';
 import 'package:xiguamanhua/service/http_request.dart';
-import 'package:xiguamanhua/service/xg_service_config.dart';
 
 class XGRecommendRequest {
-  static Future<List<XGRecommendModel>> requestRecommendList() async {
-    // 1. 构建url
-    final url = '${XGServiceConfig.baseURL_source1}/recommend_index_ios.json';
+  static Future<XGFloorModel> requestRecommendList(String htmlUrl) async {
+    print('++++开始解析数据++++');
+    htmlUrl = 'https://m.happymh.com';
+    Map<String, dynamic> headers = {
+      'Cookie': 'Hm_lpvt_41c11edf5dd2000ce3e9a84e746d3ca3=1601733732; Hm_lvt_41c11edf5dd2000ce3e9a84e746d3ca3=1601693824; _ga=GA1.2.731660466.1601693822; _gat=1; _gid=GA1.2.1486212030.1601693822; PHPSESSID=20fjrsjb5jsp5h9gdsg1pp4ofm',
+      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+      'Accept-Encoding': 'gzip, deflate, br',
+      'Host': 'm.happymh.com',
+      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15',
+      'Accept-Language': 'zh-cn',
+      'Referer': 'https://m.happymh.com/checkRobot',
+      'Connection': 'keep-alive',
+    };
 
-    // 2. 发送网络请求，获取数据
-    List result = await HttpRequest.request(url);
+    final response = await HttpRequest.request(htmlUrl, headers: headers);
+    final document = parse(response);
+    XGFloorModel floorModel = XGFloorModel();
 
-    if (result.isNotEmpty) {
-      result.removeAt(0); // 删除第一组数据
-      // result.removeLast();
-    }
-    
-    // 3. 将数据json转换成model, 将二维数组转换成一维数组
-    List<XGRecommendModel> recommends = [];
-    for (var dic in result) {
-      XGRecommendModel model = XGRecommendModel();
-      model.categoryId = dic['category_id'];
-      model.title = dic['title'] == null ? '其他' : dic['title'];
-      model.sort = dic['sort'];
-      recommends.add(model);
-      
-      List dataList = dic['data'];
-      for (int i = 0; i < dataList.length; i++) {
-        final json = dataList[i];
-        XGRecommendModel model = XGRecommendModel();
-        model.cover = json['cover'];
-        model.titleName = json['title'];
-        model.subTitle = json['sub_title'];
-        model.type = json['type'];
-        model.url = json['url'];
-        model.objId = json['obj_id'];
-        model.status = json['status'];
-        recommends.add(model);
+    final categoryList = document.getElementsByTagName('div');
+    for (var category in categoryList) {
+      if (category.className == 'manga-area') {
+        XGRecommendModel model = XGRecommendModel.formElement(category);
+        floorModel.recommendModelToFloorModel(model);
       }
     }
-
-    return recommends;
+    return floorModel;
   }
 }

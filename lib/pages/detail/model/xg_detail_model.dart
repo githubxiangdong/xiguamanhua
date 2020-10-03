@@ -1,21 +1,27 @@
+import 'dart:io';
+
+import 'package:html/dom.dart';
+
 class XGDetailModel {
   int comicsId; // 漫画id
-  String title; // 漫画名称
-  String cover; // 漫画封面
+  String comicsName; // 漫画名称
+  String comicsCover; // 漫画封面
   String description; // 漫画简介
-  int lastUpdateTime; // 漫画最近一次更新时间
+  String lastUpdateTime; // 漫画最近一次更新时间
   String lastUpdateChapterName; // 漫画最近一次更新章节名
   int lastUpdateChapterId; // 漫画最近一次更新章节id
   String comicsType; // 漫画类型
   String comicsStatus; // 漫画更新状态
   String author; // 漫画作者
   int subscribeNum; // 订阅数量
+  String grade; // 评分
   List<XGChapterModel> chapters; // 漫画章节
+  Map<String, String> headers;
 
   XGDetailModel({
     this.comicsId,
-    this.title,
-    this.cover,
+    this.comicsName,
+    this.comicsCover,
     this.description,
     this.lastUpdateTime,
     this.lastUpdateChapterName,
@@ -24,49 +30,94 @@ class XGDetailModel {
     this.comicsStatus,
     this.author,
     this.subscribeNum,
+    this.grade,
     this.chapters,
+    this.headers,
   });
 
-  XGDetailModel.fromJson(Map<String, dynamic> json) {
-    comicsId = json['id'];
-    title = json['title'];
-    cover = json['cover'];
-    description = json['description'];
-    lastUpdateTime = json['last_updatetime'];
-    lastUpdateChapterName = json['last_update_chapter_name'];
-    lastUpdateChapterId = json['last_update_chapter_id'];
-    subscribeNum = json['subscribe_num'];
+  XGDetailModel.fromDocument(Document document) {
+    final contentList = document.getElementsByTagName('div');
 
-    if (json['types'] != null) {
-      json['types'].forEach((v) {
-        comicsType = comicsType == null ? '${v['tag_name']}' : '$comicsType/${v['tag_name']}';
-      });
-    }
-    if (json['status'] != null) {
-      json['status'].forEach((v) {
-        comicsStatus = comicsStatus == null ? '${v['tag_name']}' : '$comicsStatus/${v['tag_name']}';
-      });
-    }
-    if (json['authors'] != null) {
-      json['types'].forEach((v) {
-        author = author == null ? '${v['tag_name']}' : '$author/${v['tag_name']}';
-      });
-    }
-    if (json['chapters'] != null) {
-      json['chapters'].forEach((chapterDic) {
-        if (chapterDic['data'] != null) {
-          chapters = List<XGChapterModel>();
-          chapterDic['data'].forEach((dataDic) {
-            chapters.add(XGChapterModel.fromJson(dataDic));
-          });
+    for (var content in contentList) {
+      if (content.className == 'content detail-page') {
+
+        // 1. 封面图，作者等
+        comicsCover = content.getElementsByTagName('mip-img').first.attributes['src'];
+        comicsName = content.getElementsByTagName('h2').first.text;
+        print('zxd-log: comicsCover >>>>> $comicsCover');
+        print('zxd-log: comicsName >>>>> $comicsName');
+
+        final propertyList = content.getElementsByTagName('div');
+        for (var property in propertyList) {
+          if (property.className.contains('mg-property')) {
+            final aList = property.getElementsByTagName('a');
+            for (var i = 0; i < aList.length; i++) {
+              if (i == 0) {
+                author = aList[i].text;
+              } else {
+                comicsType = comicsType == null ? aList[i].text : '$comicsType/${aList[i].text}';
+              }
+            }
+
+            print('zxd-log: author >>>>> $author');
+            print('zxd-log: comicsType >>>>> $comicsType');
+          }
         }
-      });
-    }
-  }
 
-  @override
-  String toString() {
-    return 'XGDetailModel{comicsId: $comicsId, title: $title, cover: $cover, description: $description, lastUpdateTime: $lastUpdateTime, lastUpdateChapterName: $lastUpdateChapterName, lastUpdateChapterId: $lastUpdateChapterId, comicsType: $comicsType, comicsStatus: $comicsStatus, author: $author, subscribeNum: $subscribeNum, chapters: $chapters}';
+        // 2. 简介
+        final descriptionList = content.getElementsByTagName('div');
+        for (var desc in descriptionList) {
+          if (desc.className.contains('manga-introduction')) {
+            description = desc.getElementsByTagName('mip-showmore').first.text;
+            print('zxd-log: description >>>>> $description');
+            break;
+          }
+        }
+
+        // 3. 评分 跟新时间
+        final gradeList = content.getElementsByTagName('p');
+        for (var g in gradeList) {
+          if (g.className.contains('score')) {
+            grade = g.text == null ? 5.0 : g.text;
+            print('zxd-log: grade >>>>> ${g.text}');
+          } else if (g.className.contains('time')) {
+            lastUpdateTime = g.text == null ? '最近' : g.text;
+            print('zxd-log: lastUpdateTime >>>>> $lastUpdateTime');
+          }
+        }
+
+        // 4. 状态
+        final statusList = content.getElementsByTagName('div');
+        for (var status in statusList) {
+          if (status.className.contains('ongoing-status')) {
+            comicsStatus = status.text == null ? '未知' : status.text;
+            print('zxd-log: comicsStatus >>>>> ${comicsStatus.toString()}');
+            break;
+          }
+        }
+
+        // 章节
+        final chapterList = content.getElementsByTagName('div');
+        for (var chapter in chapterList) {
+          if (chapter.className.contains('links-area')) {
+            print('zxd-log: chapterUrl >>>>> ${chapter.outerHtml}');
+            XGChapterModel.fromElement(chapter);
+          }
+        }
+      }
+    }
+
+    headers = {
+      'Accept': 'image/png,image/svg+xml,image/*;q=0.8,video/*;q=0.8,*/*;q=0.5',
+      'Pragma': 'no-cache',
+      'Cache-Control': ' no-cache',
+      'Host': 'c.nationaltcm.com',
+      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15',
+      'Accept-Language': 'zh-cn',
+      'Referer': 'https://m.happymh.com/',
+      'Accept-Encoding': 'gzip, deflate, br',
+      'Connection': 'keep-alive',
+    };
   }
 }
 
@@ -76,6 +127,8 @@ class XGChapterModel {
   int updateTime;
   int fileSize;
   int chapterOrder;
+  String chapterUrl; // 章节url
+  bool isNew;
 
   XGChapterModel({
     this.chapterId,
@@ -83,18 +136,19 @@ class XGChapterModel {
     this.updateTime,
     this.fileSize,
     this.chapterOrder,
+    this.chapterUrl,
+    this.isNew,
   });
 
-  XGChapterModel.fromJson(Map<String, dynamic> json) {
-    chapterId = json['chapter_id'];
-    chapterTitle = json['chapter_title'];
-    updateTime = json['updatetime'];
-    fileSize = json['filesize'];
-    chapterOrder = json['chapter_order'];
-  }
-
-  @override
-  String toString() {
-    return 'XGChapterModel{chapterId: $chapterId, chapterTitle: $chapterTitle, updateTime: $updateTime, fileSize: $fileSize, chapterOrder: $chapterOrder}';
+  XGChapterModel.fromElement(Element element) {
+    final chapterA = element.getElementsByTagName('a').first;
+    chapterUrl = chapterA.attributes['href'];
+    chapterTitle = chapterA.text;
+    final newList = chapterA.getElementsByTagName('span');
+    for (var n in newList) {
+      isNew = n.className.contains('new');
+    }
+    print('zxd-log: chapterUrl >>>>> $chapterUrl');
+    print('zxd-log: chapterTitle >>>>> $chapterTitle');
   }
 }
