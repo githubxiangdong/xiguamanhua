@@ -14,6 +14,18 @@ class XGRecommendModel {
     this.comicsList,
   });
 
+  XGRecommendModel.fromJson(Map<String, dynamic> json) {
+    categoryId = json['category_id'] == null ? '' : json['category_id'];
+    categoryName = json['title'] == null ? '' : json['title'];
+
+    if (json['data'] != null) {
+      comicsList = List<XGComicsModel>();
+      json['data'].forEach((v) {
+        comicsList.add(XGComicsModel.fromJson(v));
+      });
+    }
+  }
+
   XGRecommendModel.formElement(Element element) {
     // 1. 获取分类名和更多链接
     categoryName = element.getElementsByTagName('h3').first.text;

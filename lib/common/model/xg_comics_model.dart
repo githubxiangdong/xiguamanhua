@@ -25,6 +25,16 @@ class XGComicsModel {
     this.headers,
   });
 
+  XGComicsModel.fromJson(Map<String, dynamic> json) {
+    comicsId = json['obj_id'] == null ? json['id'] : json['obj_id'];
+    comicsName = json['title'] == null ? '' : json['title'];
+    comicsProfile = json['sub_title']== null ? '' : json['sub_title'];
+    comicsCover = json['cover']== null ? '' : json['cover'];
+    comicsType = json['type']== null ? 0 : json['type'];
+    comicsUrl = json['url']== null ? '' : json['url'];
+    comicsStatus = json['status']== null ? '' : json['status'];
+  }
+
   // 获取每个漫画的具体信息
   XGComicsModel.fromElement(Element element) {
     final detailList = element.getElementsByTagName('a');

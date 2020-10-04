@@ -1,12 +1,13 @@
 class XGReaderModel {
-  int chapterId;
-  int comicId;
-  String title;
-  int chapterOrder;
-  int direction;
-  List<String> pageUrl;
-  int picnum;
-  int commentCount;
+  int chapterId = 0;
+  int comicId = 0;
+  String title = '';
+  int chapterOrder = 0;
+  int direction = 0;
+  List<String> pageUrl = [];
+  int picnum = 0;
+  int commentCount = 0;
+  Map<String, String> headers = {};
 
   XGReaderModel(
       {this.chapterId,
@@ -16,7 +17,9 @@ class XGReaderModel {
         this.direction,
         this.pageUrl,
         this.picnum,
-        this.commentCount});
+        this.commentCount,
+        this.headers
+      });
 
   XGReaderModel.fromJson(Map<String, dynamic> json) {
     chapterId = json['chapter_id'];
@@ -27,6 +30,16 @@ class XGReaderModel {
     pageUrl = json['page_url'].cast<String>();
     picnum = json['picnum'];
     commentCount = json['comment_count'];
+
+    headers = {
+      'Host': 'imgsmall.dmzj1.com',
+      'Accept': 'image/*;q=0.8',
+      // 'User-Agent': '动漫之家Pro/155 CFNetwork/1128.0.1 Darwin/19.6.0',
+      'Accept-Language': 'zh-cn',
+      'Referer': 'http://imgsmall.dmzj1.com/',
+      'Accept-Encoding': 'gzip, deflate',
+      'Connection': 'keep-alive',
+    };
   }
 
   Map<String, dynamic> toJson() {

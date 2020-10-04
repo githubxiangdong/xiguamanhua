@@ -1,22 +1,20 @@
-import 'dart:io';
-
 import 'package:html/dom.dart';
 
 class XGDetailModel {
-  int comicsId; // 漫画id
-  String comicsName; // 漫画名称
-  String comicsCover; // 漫画封面
-  String description; // 漫画简介
-  String lastUpdateTime; // 漫画最近一次更新时间
-  String lastUpdateChapterName; // 漫画最近一次更新章节名
-  int lastUpdateChapterId; // 漫画最近一次更新章节id
-  String comicsType; // 漫画类型
-  String comicsStatus; // 漫画更新状态
-  String author; // 漫画作者
-  int subscribeNum; // 订阅数量
-  String grade; // 评分
-  List<XGChapterModel> chapters; // 漫画章节
-  Map<String, String> headers;
+  int comicsId = 0; // 漫画id
+  String comicsName = ''; // 漫画名称
+  String comicsCover = ''; // 漫画封面
+  String description = ''; // 漫画简介
+  String lastUpdateTime = ''; // 漫画最近一次更新时间
+  String lastUpdateChapterName = ''; // 漫画最近一次更新章节名
+  int lastUpdateChapterId = 0; // 漫画最近一次更新章节id
+  String comicsType = ''; // 漫画类型
+  String comicsStatus = ''; // 漫画更新状态
+  String author = ''; // 漫画作者
+  int subscribeNum = 0; // 订阅数量
+  String grade = ''; // 评分
+  List<XGChapterModel> chapters = []; // 漫画章节
+  Map<String, String> headers = {};
 
   XGDetailModel({
     this.comicsId,
@@ -34,6 +32,48 @@ class XGDetailModel {
     this.chapters,
     this.headers,
   });
+
+  XGDetailModel.fromJson(Map<String, dynamic> json) {
+    comicsId = json['id'] == null ? 0 : json['id'];
+    comicsName = json['title'] == null ? '' : json['title'];
+    comicsCover = json['cover'] == null ? '' : json['cover'];
+    description = json['description'] == null ? '' : json['description'];
+    lastUpdateChapterName = json['last_update_chapter_name'] == null ? '' : json['last_update_chapter_name'];
+
+    int time = json['last_updatetime'] == null ? 0 : json['last_updatetime'];
+    lastUpdateTime = DateTime.fromMicrosecondsSinceEpoch(time * 1000).toString();
+
+    if (json['types'] != null) {
+      json['types'].forEach((v) {
+        final tagName = v['tag_name'] == null ? '' : v['tag_name'];
+        comicsType = comicsType == '' ? tagName : '$comicsType $tagName';
+      });
+    }
+
+    if (json['status'] != null) {
+      json['status'].forEach((v) {
+        final tagName = v['tag_name'] == null ? '' : v['tag_name'];
+        comicsStatus = comicsStatus == '' ? tagName : '$comicsStatus $tagName';
+      });
+    }
+
+    if (json['authors'] != null) {
+      json['authors'].forEach((v) {
+        final tagName = v['tag_name'] == null ? '' : v['tag_name'];
+        author = author == '' ? tagName : '$author $tagName';
+      });
+    }
+
+    if (json['chapters'] != null) {
+      final chapter = json['chapters'].first;
+      if (chapter['data'] != null) {
+        chapters = List<XGChapterModel>();
+        chapter['data'].forEach((v) {
+          chapters.add(XGChapterModel.fromJson(v));
+        });
+      }
+    }
+  }
 
   XGDetailModel.fromDocument(Document document) {
     final contentList = document.getElementsByTagName('div');
@@ -81,7 +121,7 @@ class XGDetailModel {
             grade = g.text == null ? 5.0 : g.text;
             print('zxd-log: grade >>>>> ${g.text}');
           } else if (g.className.contains('time')) {
-            lastUpdateTime = g.text == null ? '最近' : g.text;
+            lastUpdateTime = g.text == null ? '未知' : g.text;
             print('zxd-log: lastUpdateTime >>>>> $lastUpdateTime');
           }
         }
@@ -122,13 +162,13 @@ class XGDetailModel {
 }
 
 class XGChapterModel {
-  int chapterId;
-  String chapterTitle;
-  int updateTime;
-  int fileSize;
-  int chapterOrder;
-  String chapterUrl; // 章节url
-  bool isNew;
+  int chapterId = 0;
+  String chapterTitle = '';
+  int updateTime = 0;
+  int fileSize = 0;
+  int chapterOrder = 0;
+  String chapterUrl = ''; // 章节url
+  bool isNew = false;
 
   XGChapterModel({
     this.chapterId,
@@ -139,6 +179,11 @@ class XGChapterModel {
     this.chapterUrl,
     this.isNew,
   });
+
+  XGChapterModel.fromJson(Map<String, dynamic> json) {
+    chapterId = json['chapter_id'] == null ? 0 : json['chapter_id'];
+    chapterTitle = json['chapter_title'] == null ? '' : json['chapter_title'];
+  }
 
   XGChapterModel.fromElement(Element element) {
     final chapterA = element.getElementsByTagName('a').first;

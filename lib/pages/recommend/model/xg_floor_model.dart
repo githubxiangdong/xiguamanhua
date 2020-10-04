@@ -8,6 +8,7 @@ class XGFloorModel {
   XGRecommendModel floor_3;
   XGRecommendModel floor_4;
   XGRecommendModel floor_5;
+  List<XGRecommendModel> recommendList;
   int floorCount = 0;
 
   XGFloorModel({
@@ -16,8 +17,56 @@ class XGFloorModel {
     this.floor_3,
     this.floor_4,
     this.floor_5,
+    this.recommendList,
     this.floorCount,
   });
+
+  XGFloorModel.fromList(List<dynamic> list) {
+    recommendList = List<XGRecommendModel>();
+    for (var json in list) {
+      XGRecommendModel recommendModel = XGRecommendModel.fromJson(json);
+      recommendList.add(recommendModel);
+    }
+
+    XGRecommendModel model50;
+    for (var model in recommendList) {
+      if (model.categoryId == 50) {
+        model50  = model;
+        break;
+      }
+    }
+
+    for (var model in recommendList) {
+      if (model.categoryId == 47) {
+        model.comicsList  = model.comicsList + model50.comicsList;
+        break;
+      }
+    }
+
+    for (var recommendModel in recommendList) {
+      if (recommendModel.categoryId == 47) { // 近期必看
+        recommendModel.categoryName = '西瓜推荐';
+        floor_1 = recommendModel;
+        floorCount = 1;
+      } else if (recommendModel.categoryId == 54) { // 火热连载
+        recommendModel.categoryName = '火热追慢';
+        floor_3 = recommendModel;
+        floorCount = 2;
+      } else if (recommendModel.categoryId == 55) { // 条漫专区
+        recommendModel.categoryName = '少女漫画';
+        floor_4 = recommendModel;
+        floorCount = 3;
+      } else if (recommendModel.categoryId == 92) { // 动画专区
+        recommendModel.categoryName = '动画专属';
+        floor_5 = recommendModel;
+        floorCount = 4;
+      } else if (recommendModel.categoryId == 56) { // 最新上架
+        recommendModel.categoryName = '猜你喜欢';
+        floor_2 = recommendModel;
+        floorCount = 5;
+      }
+    }
+  }
 
   XGFloorModel.fromModel(Document document) {
     final categoryList = document.getElementsByTagName('div');

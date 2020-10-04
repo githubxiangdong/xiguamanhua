@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:xiguamanhua/pages/reader/model/xg_reader_model.dart';
 import 'package:xiguamanhua/pages/reader/request/xg_reader_request.dart';
@@ -23,7 +24,6 @@ class _XGReaderPageState extends State<XGReaderPage> {
       setState(() {
         _readerModel = rsp;
       });
-      print('zxd-log: ${_readerModel.toString()}');
     });
   }
 
@@ -31,7 +31,7 @@ class _XGReaderPageState extends State<XGReaderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.comicsTitle == null ? '我是漫画' : widget.comicsTitle),
+        title: Text(_readerModel == null ? '加载中...' : _readerModel.title),
       ),
       body: _buildReaderItem(),
     );
@@ -40,12 +40,12 @@ class _XGReaderPageState extends State<XGReaderPage> {
   Widget _buildReaderItem() {
     if (_readerModel == null) {
       return Center(
-        child: Text('加载中...'),
+        child: Text('加载中...', style: Theme.of(context).textTheme.subtitle2),
       );
     }
 
     return ListView.builder(
-      itemCount: _readerModel.pageUrl.length,
+      itemCount: (_readerModel == null || _readerModel.pageUrl.isEmpty) ? 0 : _readerModel.pageUrl.length,
       itemBuilder: (ctx, index) {
         return _buildReaderItemImage(_readerModel.pageUrl[index]);
       },
@@ -54,8 +54,15 @@ class _XGReaderPageState extends State<XGReaderPage> {
 
   Widget _buildReaderItemImage(String url) {
     return Container(
-      color: Colors.grey,
-      child: Image.network(url, headers: {'Referer' : 'http://imgsmall.dmzj1.com/'},),
+      child: CachedNetworkImage(
+        width: double.infinity,
+        placeholder: (ctx, url) {
+          return Image.asset('assets/images/other/xg_placeholder_img.png');
+        },
+        imageUrl: url,
+        fit: BoxFit.fitHeight,
+        httpHeaders: _readerModel.headers,
+      ),
     );
   }
 }

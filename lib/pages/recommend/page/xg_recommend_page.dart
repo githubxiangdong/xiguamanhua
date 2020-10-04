@@ -26,9 +26,9 @@ class _XGRecommendPageState extends State<XGRecommendPage> {
   void initState() {
     super.initState();
     // 发送网络请求
-    XGRecommendRequest.requestRecommendList('https://m.gufengmh8.com').then((rsp) {
+    XGRecommendRequest.requestRecommendList().then((rsp) {
       setState(() {
-        // _floorModel = rsp;
+        _floorModel = rsp;
       });
     });
   }
@@ -134,7 +134,7 @@ class _XGRecommendPageState extends State<XGRecommendPage> {
             Container(
               margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
               child: Text(
-                model.comicsProfile,
+                model.comicsStatus,
                 maxLines: 1,
                 style: Theme.of(context).textTheme.bodyText1,
               ),

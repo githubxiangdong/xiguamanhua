@@ -8,6 +8,7 @@ import 'package:xiguamanhua/pages/reader/page/xg_reader_page.dart';
 class XGDetailPage extends StatefulWidget {
   static const String routeName = '/XGDetailPage';
   final XGComicsModel model;
+
   XGDetailPage(this.model);
 
   @override
@@ -24,13 +25,13 @@ class _XGDetailPageState extends State<XGDetailPage> {
       arguments: [_detailModel.comicsId, chapterId, _detailModel.comicsName],
     );
   }
-  
+
   ///
   @override
   void initState() {
     super.initState();
     // 请求网络
-    XGDetailRequest.requestDetailInfo(widget.model.comicsDetailUrl).then((rsp) {
+    XGDetailRequest.requestDetailInfo(widget.model.comicsId).then((rsp) {
       setState(() {
         _detailModel = rsp;
       });
@@ -42,7 +43,7 @@ class _XGDetailPageState extends State<XGDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.model.comicsName),
+        title: Text(_detailModel == null ? '' : _detailModel.comicsName),
       ),
       body: _buildDetailLayout(),
     );
@@ -52,10 +53,7 @@ class _XGDetailPageState extends State<XGDetailPage> {
   Widget _buildDetailLayout() {
     if (_detailModel == null) {
       return Center(
-        child: Text(
-          '加载中...',
-          style: Theme.of(context).textTheme.subtitle1,
-        ),
+        child: Text('加载中...', style: Theme.of(context).textTheme.subtitle2),
       );
     }
     return CustomScrollView(
@@ -66,7 +64,8 @@ class _XGDetailPageState extends State<XGDetailPage> {
         _buildProfileContent(),
         _buildSpaceFill(10),
         _buildContentNavigate('章节:'),
-        // _buildChapter(),
+        _buildSpaceFill(10),
+        _buildChapter(),
       ],
     );
   }
@@ -102,7 +101,7 @@ class _XGDetailPageState extends State<XGDetailPage> {
   /// 创建头部内容
   Widget _buildHeaderContent() {
     return Positioned(
-      left: 30,
+      left: 25,
       bottom: -20,
       height: 165,
       child: Row(
@@ -123,7 +122,6 @@ class _XGDetailPageState extends State<XGDetailPage> {
       },
       imageUrl: _detailModel.comicsCover,
       fit: BoxFit.fill,
-      httpHeaders: _detailModel.headers,
     );
   }
 
@@ -136,6 +134,7 @@ class _XGDetailPageState extends State<XGDetailPage> {
         _buildContentItem('作者：', _detailModel?.author),
         _buildContentItem('类型：', _detailModel?.comicsType),
         _buildContentItem('状态：', _detailModel?.comicsStatus),
+        _buildContentItem('更新话：', _detailModel?.lastUpdateChapterName),
         _buildContentItem('更新时间：', _detailModel?.lastUpdateTime),
       ],
     );
@@ -143,16 +142,23 @@ class _XGDetailPageState extends State<XGDetailPage> {
 
   /// 创建内容
   Widget _buildContentItem(String label, String title) {
+    TextStyle style = label == '漫画：'
+        ? Theme.of(context).textTheme.subtitle1.copyWith(
+              color: Color.fromRGBO(80, 80, 80, 1),
+              fontWeight: FontWeight.bold,
+            )
+        : Theme.of(context).textTheme.bodyText2.copyWith(
+              color: Color.fromRGBO(80, 80, 80, 1),
+            );
     return Container(
       height: 20,
-      child: Row(
-        children: [
-          Text(label),
-          Text(
-            title,
-            style: Theme.of(context).textTheme.bodyText1.copyWith(color: Color.fromRGBO(80, 80, 80, 1)),
-          ),
-        ],
+      child: Expanded(
+        child: Row(
+          children: [
+            Text(label),
+            Text(title, style: style),
+          ],
+        ),
       ),
     );
   }
@@ -200,15 +206,18 @@ class _XGDetailPageState extends State<XGDetailPage> {
 
   /// 创建章节
   Widget _buildChapter() {
-    return SliverList(
+    return SliverGrid(
       delegate: SliverChildBuilderDelegate(
         (ctx, index) {
-          if (_detailModel.chapters == null) {
-            return Container();
-          }
-          return _buildChapterItem(_detailModel?.chapters[index]);
+          return _buildChapterItem(_detailModel.chapters[index]);
         },
-        childCount: _detailModel.chapters == null ? 0 : _detailModel.chapters.length,
+        childCount: ((_detailModel != null || _detailModel.chapters.isNotEmpty) ? _detailModel.chapters.length : 0),
+      ),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 4,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+        childAspectRatio: 2.8,
       ),
     );
   }
@@ -217,27 +226,12 @@ class _XGDetailPageState extends State<XGDetailPage> {
   Widget _buildChapterItem(XGChapterModel model) {
     return GestureDetector(
       child: Container(
-        alignment: Alignment.centerLeft,
-        margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
-        height: 44,
+        alignment: Alignment.center,
         decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(width: 1, color: Color.fromRGBO(245, 245, 245, 1)),
-          ),
+          border: Border.all(width: 0.8, color: Color.fromRGBO(220, 220, 220, 1)),
+          borderRadius: BorderRadius.circular(4),
         ),
-        child: Container(
-          padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(model?.chapterTitle),
-              Icon(
-                Icons.navigate_next,
-                color: Color.fromRGBO(225, 225, 225, 1),
-              ),
-            ],
-          ),
-        ),
+        child: Text(model.chapterTitle),
       ),
       onTap: () => _onGoToReaderPage(model.chapterId),
     );
