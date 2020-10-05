@@ -5,6 +5,7 @@ import 'package:xiguamanhua/pages/detail/page/xg_detail_page.dart';
 import 'package:xiguamanhua/pages/recommend/model/xg_floor_model.dart';
 import 'package:xiguamanhua/pages/recommend/model/xg_recommend_model.dart';
 import 'package:xiguamanhua/pages/recommend/request/xg_recommend_request.dart';
+import 'package:xiguamanhua/pages/recommend/widget/xg_recommend_banner.dart';
 
 class XGRecommendPage extends StatefulWidget {
   static const String routeName = '/XGRecommendPage';
@@ -43,6 +44,7 @@ class _XGRecommendPageState extends State<XGRecommendPage> {
     }
     return CustomScrollView(
       slivers: [
+        XGRecommendBanner(),
         _buildSectionHeader(_floorModel.floor_1),
         _buildSectionItem(_floorModel.floor_1.comicsList),
         _buildSectionHeader(_floorModel.floor_2),
@@ -111,38 +113,47 @@ class _XGRecommendPageState extends State<XGRecommendPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AspectRatio(
-              aspectRatio: 0.8,
-              child: CachedNetworkImage(
-                placeholder: (ctx, url) {
-                  return Image.asset('assets/images/other/xg_placeholder_img.png');
-                },
-                imageUrl: model.comicsCover,
-                fit: BoxFit.fill,
-                httpHeaders: model.headers,
-              ),
-            ),
+            _buildItemImage(model),
             SizedBox(height: 3),
-            Container(
-              margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-              child: Text(
-                model.comicsName,
-                maxLines: 1,
-                style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-              child: Text(
-                model.comicsStatus,
-                maxLines: 1,
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-            ),
+            _buildItemInfo(model),
           ],
         ),
       ),
       onTap: () => _onGoToDetailPage(model),
+    );
+  }
+
+  Widget _buildItemImage(XGComicsModel model) {
+    return AspectRatio(
+      aspectRatio: 0.8,
+      child: CachedNetworkImage(
+        placeholder: (ctx, url) {
+          return Image.asset('assets/images/other/xg_placeholder_img.png');
+        },
+        imageUrl: model.comicsCover,
+        fit: BoxFit.fill,
+      ),
+    );
+  }
+
+  Widget _buildItemInfo(XGComicsModel model) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            model.comicsName,
+            maxLines: 1,
+            style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold),
+          ),
+          Text(
+            model.comicsStatus,
+            maxLines: 1,
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+        ],
+      ),
     );
   }
 }

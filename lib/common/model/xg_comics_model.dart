@@ -1,16 +1,17 @@
 import 'package:html/dom.dart';
 
 class XGComicsModel {
-  int comicsId; // 漫画id
-  String comicsName; // 漫画名
-  String comicsProfile; // 漫画子标题
-  String comicsCover; // 漫画封面图
-  int comicsSort; // 漫画排名
-  int comicsType; // 漫画类型
-  String comicsStatus; // 漫画状态
-  String comicsUrl; // 漫画站外链接
-  String comicsDetailUrl; // 漫画详情链接
-  Map<String, String> headers; // 图片请求头设置
+  int comicsId = 0; // 漫画id
+  String comicsName = ''; // 漫画名
+  String authors = '';
+  String comicsProfile = ''; // 漫画子标题
+  String comicsCover = ''; // 漫画封面图
+  int comicsSort = 0; // 漫画排名
+  int comicsType = 0; // 漫画类型
+  String comicsStatus = ''; // 漫画状态
+  String comicsUrl = ''; // 漫画站外链接
+  String comicsDetailUrl = ''; // 漫画详情链接
+  Map<String, String> headers = {}; // 图片请求头设置
 
   XGComicsModel({
     this.comicsId,
@@ -33,6 +34,7 @@ class XGComicsModel {
     comicsType = json['type']== null ? 0 : json['type'];
     comicsUrl = json['url']== null ? '' : json['url'];
     comicsStatus = json['status']== null ? '' : json['status'];
+    authors = json['authors'] == null ? '' : json['authors'];
   }
 
   // 获取每个漫画的具体信息

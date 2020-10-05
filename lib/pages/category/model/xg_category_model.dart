@@ -1,7 +1,7 @@
 class XGCategoryModel {
-  int tagId;
-  String title;
-  String cover;
+  int tagId = 0;
+  String title = '';
+  String cover = '';
 
   XGCategoryModel({this.tagId, this.title, this.cover});
 

@@ -1,10 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:xiguamanhua/pages/category/model/xg_category_model.dart';
+import 'package:xiguamanhua/pages/category/page/xg_category_detail_page.dart';
 import 'package:xiguamanhua/pages/category/request/xg_category_request.dart';
 
 class XGCategoryPage extends StatefulWidget {
   static const String routeName = '/XGCategoryPage';
-
   @override
   _XGCategoryPageState createState() => _XGCategoryPageState();
 }
@@ -12,6 +13,12 @@ class XGCategoryPage extends StatefulWidget {
 class _XGCategoryPageState extends State<XGCategoryPage> {
   final List<XGCategoryModel> _categories = [];
 
+  ///
+  void _onGoToCategoryDetailPage(int categoryId, String title) {
+    Navigator.of(context).pushNamed(XGCategoryDetailPage.routeName, arguments: [categoryId, title]);
+  }
+
+  ///
   @override
   void initState() {
     super.initState();
@@ -25,30 +32,38 @@ class _XGCategoryPageState extends State<XGCategoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      itemCount: _categories.isNotEmpty ? _categories.length : 0,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 4,
-        mainAxisSpacing: 5,
-        crossAxisSpacing: 4,
-        childAspectRatio: 0.79,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('分类', style: Theme.of(context).textTheme.headline1),
       ),
-      itemBuilder: (ctx, index) {
-        return _buildItem(_categories[index]);
-      },
+      body: GridView.builder(
+        itemCount: _categories.isNotEmpty ? _categories.length : 0,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 4,
+          mainAxisSpacing: 5,
+          crossAxisSpacing: 4,
+          childAspectRatio: 0.79,
+        ),
+        itemBuilder: (ctx, index) {
+          return _buildItem(_categories[index]);
+        },
+      ),
     );
   }
 
   /// 构建item
   Widget _buildItem(XGCategoryModel model) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(0, 4, 0, 0),
-      child: Column(
-        children: [
-          _buildItemImage(model),
-          _buildItemTitle(model),
-        ],
+    return GestureDetector(
+      child: Container(
+        padding: EdgeInsets.fromLTRB(0, 4, 0, 0),
+        child: Column(
+          children: [
+            _buildItemImage(model),
+            _buildItemTitle(model),
+          ],
+        ),
       ),
+      onTap: () => _onGoToCategoryDetailPage(model.tagId, model.title),
     );
   }
 
@@ -56,7 +71,13 @@ class _XGCategoryPageState extends State<XGCategoryPage> {
   Widget _buildItemImage(XGCategoryModel model) {
     return AspectRatio(
       aspectRatio: 1,
-      child: Image.network(model?.cover),
+      child: CachedNetworkImage(
+        placeholder: (ctx, url) {
+          return Image.asset('assets/images/other/xg_placeholder_img.png');
+        },
+        imageUrl: model.cover,
+        fit: BoxFit.fill,
+      ),
     );
   }
 
