@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:xiguamanhua/common/model/xg_comics_model.dart';
+import 'package:xiguamanhua/common/theme/xg_app_theme.dart';
 import 'package:xiguamanhua/pages/detail/model/xg_detail_model.dart';
 import 'package:xiguamanhua/pages/detail/request/xg_detail_request.dart';
 import 'package:xiguamanhua/pages/reader/page/xg_reader_page.dart';
@@ -43,6 +44,7 @@ class _XGDetailPageState extends State<XGDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: XGAppTheme.navigationBarColor,
         title: Text(_detailModel == null ? '' : _detailModel.comicsName),
       ),
       body: _buildDetailLayout(),

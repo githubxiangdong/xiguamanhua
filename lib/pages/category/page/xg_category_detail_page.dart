@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:xiguamanhua/common/model/xg_comics_model.dart';
 import 'package:flutter/material.dart';
+import 'package:xiguamanhua/common/theme/xg_app_theme.dart';
 import 'package:xiguamanhua/pages/category/request/xg_category_detail_request.dart';
 import 'package:xiguamanhua/pages/detail/page/xg_detail_page.dart';
 
@@ -26,6 +27,7 @@ class _XGCategoryDetailPageState extends State<XGCategoryDetailPage> {
   @override
   void initState() {
     super.initState();
+    print('zxd-log: categoryId >>>>> ${widget.categoryId}');
     XGCategoryDetailRequest.requestCategoryDetailList(widget.categoryId, 0).then((rsp) {
       setState(() {
         _comicsModelList = rsp;
@@ -37,6 +39,7 @@ class _XGCategoryDetailPageState extends State<XGCategoryDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: XGAppTheme.navigationBarColor,
         title: Text(widget.title),
       ),
       body: Container(

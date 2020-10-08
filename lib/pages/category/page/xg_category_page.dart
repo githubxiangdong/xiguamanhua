@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:xiguamanhua/common/theme/xg_app_theme.dart';
 import 'package:xiguamanhua/pages/category/model/xg_category_model.dart';
 import 'package:xiguamanhua/pages/category/page/xg_category_detail_page.dart';
 import 'package:xiguamanhua/pages/category/request/xg_category_request.dart';
@@ -34,15 +35,23 @@ class _XGCategoryPageState extends State<XGCategoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: XGAppTheme.navigationBarColor,
         title: Text('分类', style: Theme.of(context).textTheme.headline1),
       ),
-      body: GridView.builder(
-        itemCount: _categories.isNotEmpty ? _categories.length : 0,
+      body: _buildItemContent(),
+    );
+  }
+  
+  Widget _buildItemContent() {
+    return Container(
+      padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+      child: GridView.builder(
+        itemCount: (_categories == null || _categories.length == 0) ? 0 : _categories.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 4,
           mainAxisSpacing: 5,
           crossAxisSpacing: 4,
-          childAspectRatio: 0.79,
+          childAspectRatio: 0.75,
         ),
         itemBuilder: (ctx, index) {
           return _buildItem(_categories[index]);
@@ -55,7 +64,7 @@ class _XGCategoryPageState extends State<XGCategoryPage> {
   Widget _buildItem(XGCategoryModel model) {
     return GestureDetector(
       child: Container(
-        padding: EdgeInsets.fromLTRB(0, 4, 0, 0),
+        padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
         child: Column(
           children: [
             _buildItemImage(model),
@@ -69,8 +78,8 @@ class _XGCategoryPageState extends State<XGCategoryPage> {
 
   /// 构建item图片
   Widget _buildItemImage(XGCategoryModel model) {
-    return AspectRatio(
-      aspectRatio: 1,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(5),
       child: CachedNetworkImage(
         placeholder: (ctx, url) {
           return Image.asset('assets/images/other/xg_placeholder_img.png');
@@ -86,7 +95,7 @@ class _XGCategoryPageState extends State<XGCategoryPage> {
     return Container(
       padding: EdgeInsets.fromLTRB(0, 2, 0, 0),
       child: Text(
-        model?.title,
+        model.title,
         style: Theme.of(context).textTheme.bodyText2.copyWith(
               fontWeight: FontWeight.bold,
             ),

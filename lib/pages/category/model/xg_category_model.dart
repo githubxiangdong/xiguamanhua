@@ -6,9 +6,9 @@ class XGCategoryModel {
   XGCategoryModel({this.tagId, this.title, this.cover});
 
   XGCategoryModel.fromJson(Map<String, dynamic> json) {
-    tagId = json['tag_id'];
-    title = json['title'];
-    cover = json['cover'];
+    tagId = json['tag_id'] == null ? 0 : json['tag_id'];
+    title = json['title'] == null ? '' : json['title'];;
+    cover = json['cover'] == null ? '' : json['cover'];;
   }
 
   Map<String, dynamic> toJson() {

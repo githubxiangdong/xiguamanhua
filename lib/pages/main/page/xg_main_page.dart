@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:xiguamanhua/common/theme/xg_app_theme.dart';
 import 'package:xiguamanhua/pages/main/page/xg_main_initialze.dart';
 
 class XGMainPage extends StatefulWidget {
@@ -25,6 +26,7 @@ class _XGMainPageState extends State<XGMainPage> {
         children: appPages,
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: XGAppTheme.tabBarColor,
         selectedFontSize: 12,
         unselectedFontSize: 12,
         selectedItemColor: Colors.orange,

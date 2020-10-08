@@ -4,6 +4,7 @@ import 'package:xiguamanhua/pages/category/page/xg_category_detail_page.dart';
 import 'package:xiguamanhua/pages/detail/page/xg_detail_page.dart';
 import 'package:xiguamanhua/pages/main/page/xg_main_page.dart';
 import 'package:xiguamanhua/pages/reader/page/xg_reader_page.dart';
+import 'package:xiguamanhua/pages/search/page/xg_search_page.dart';
 
 class XGAPPRouter {
   // 默认加载页面为homepage页
@@ -11,6 +12,7 @@ class XGAPPRouter {
   // 路由配置
   static final Map<String, WidgetBuilder> routers = {
     XGMainPage.routeName: (context) => XGMainPage(),
+    XGSearchPage.routeName: (context) => XGSearchPage(),
   };
 	
   static final RouteFactory onGenerateRoute = (settings) {

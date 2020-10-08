@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:xiguamanhua/common/theme/xg_app_theme.dart';
 import 'package:xiguamanhua/pages/reader/model/xg_reader_model.dart';
 import 'package:xiguamanhua/pages/reader/request/xg_reader_request.dart';
 
@@ -31,6 +32,7 @@ class _XGReaderPageState extends State<XGReaderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: XGAppTheme.navigationBarColor,
         title: Text(_readerModel == null ? '加载中...' : _readerModel.title),
       ),
       body: _buildReaderItem(),
