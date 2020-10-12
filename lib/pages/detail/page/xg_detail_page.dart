@@ -41,7 +41,7 @@ class _XGDetailPageState extends State<XGDetailPage> {
         title: Text(_detailModel == null ? '' : _detailModel.comicsName),
       ),
       body: _buildDetailLayout(),
-      bottomSheet: XGDetailBottomSheet(),
+      bottomSheet: XGDetailBottomSheet(widget.model, _detailModel.comicsCover),
     );
   }
 
@@ -53,7 +53,7 @@ class _XGDetailPageState extends State<XGDetailPage> {
       );
     }
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 0, 0, (44.0 + 38.0 + 5.0)),
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, (44.0 + 38.0)),
       child: CustomScrollView(
         slivers: [
           XGDetailHeader(_detailModel),
