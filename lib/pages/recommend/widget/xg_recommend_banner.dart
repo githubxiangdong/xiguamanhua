@@ -13,6 +13,7 @@ class XGRecommendBanner extends StatefulWidget {
 }
 
 class _XGRecommendBannerState extends State<XGRecommendBanner> {
+  static const double _bannerHeight = 330.0;
   List<XGComicsModel> _bannerList = [];
 
   /// 点击事件
@@ -40,7 +41,7 @@ class _XGRecommendBannerState extends State<XGRecommendBanner> {
   Widget _buildBanner() {
     if (_bannerList == null || _bannerList.length <= 0) {
       return Container(
-        height: 320,
+        height: _bannerHeight,
         child: Image.asset('assets/images/other/xg_placeholder_img.png'),
       );
     }
@@ -54,12 +55,12 @@ class _XGRecommendBannerState extends State<XGRecommendBanner> {
 
   Widget _buildBlur() {
     return Container(
-      height: 330,
+      height: _bannerHeight,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [XGAppTheme.normalColor, Colors.black45],
+          colors: [XGAppTheme.normalColor, Colors.orangeAccent], // 要弄成毛玻璃效果
         ),
       ),
     );
@@ -67,7 +68,7 @@ class _XGRecommendBannerState extends State<XGRecommendBanner> {
 
   Widget _buildSwiper() {
     return Container(
-      height: 330,
+      height: _bannerHeight,
       padding: EdgeInsets.fromLTRB(0, 10, 0, 15),
       child: Swiper(
         autoplay: true,
@@ -98,8 +99,8 @@ class _XGRecommendBannerState extends State<XGRecommendBanner> {
   SwiperPagination _buildSwiperPagination() {
     return SwiperPagination(
       builder: FractionPaginationBuilder(
-        activeFontSize: 14,
-        fontSize: 14,
+        activeFontSize: 16,
+        fontSize: 16,
         activeColor: Colors.orange,
         color: Colors.black87,
       ),

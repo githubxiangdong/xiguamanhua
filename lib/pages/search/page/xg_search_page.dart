@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:xiguamanhua/common/model/xg_comics_model.dart';
 import 'package:xiguamanhua/common/theme/xg_app_theme.dart';
+import 'package:xiguamanhua/pages/search/request/xg_search_result_request.dart';
+import 'package:xiguamanhua/pages/search/widget/xg_search_result_list.dart';
 import 'package:xiguamanhua/widgets/xg_back_button.dart';
 
 class XGSearchPage extends StatefulWidget {
@@ -12,23 +15,18 @@ class XGSearchPage extends StatefulWidget {
 class _XGSearchPageState extends State<XGSearchPage> {
   TextEditingController _searchController = TextEditingController();
   FocusNode _searchFocusNode = FocusNode();
-  
-  ///
-  void _onSearch() {
-    _searchFocusNode.unfocus();
-    print('zxd-log: _searchController1 >>>>> ${_searchController.text}');
-  }
-  
-  ///
-  void _onTextChanged(String change) {
-    
-  }
+  List<XGComicsModel> _comicsList = [];
 
+  ///
   void _onSubmitted(String text) {
     print('zxd-log: _searchController2 >>>>> $text');
+    XGSearchResultRequest.requestResultList(text, 0).then((rsp) {
+      setState(() {
+        _comicsList.addAll(rsp);
+      });
+    });
   }
-  
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,11 +35,8 @@ class _XGSearchPageState extends State<XGSearchPage> {
         leading: XGBackButton.xgBackButton(context),
         title: _buildSearchBar(),
         centerTitle: false,
-        actions: [
-          _buildSearchButton(),
-        ],
       ),
-      body: _buildSearchList(),
+      body: _buildSearchContent(),
     );
   }
   
@@ -71,27 +66,19 @@ class _XGSearchPageState extends State<XGSearchPage> {
           filled: true,
           fillColor: XGAppTheme.searchBarColor,
         ),
-        onChanged: (change) => _onTextChanged(change),
         onSubmitted: (text) => _onSubmitted(text),
       ),
     );
   }
   
-  Widget _buildSearchButton() {
-    return GestureDetector(
-      child: Container(
-        color: XGAppTheme.navigationBarColor,
-        alignment: Alignment.center,
-        padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
-        child: Text('搜索', style: Theme.of(context).textTheme.subtitle2,),
-      ),
-      onTap: () => _onSearch(),
-    );
-  }
-  
-  Widget _buildSearchList() {
+  Widget _buildSearchContent() {
+    if (_comicsList == null || _comicsList.length <= 0) {
+      return Center(
+        child: Text('还没有搜索内容，赶快去搜索吧~', style: Theme.of(context).textTheme.subtitle2),
+      );
+    }
     return Container(
-      // color: Colors.red,
+      child: XGSearchResultList(_comicsList),
     );
   }
 }

@@ -2,18 +2,24 @@ import 'package:flutter/material.dart';
 
 class XGAppTheme {
   /// normalColor
-  static const Color normalColor = Color.fromRGBO(20, 20, 20, 1);
+  static const Color normalColor = Color.fromRGBO(16, 20, 30, 1);
 
   /// BarColor
-  static const Color tabBarColor = Color.fromRGBO(30, 30, 30, 1);
-  static const Color navigationBarColor = Color.fromRGBO(30, 30, 30, 1);
-  static const Color searchBarColor = Color.fromRGBO(15, 15, 15, 1);
+  static const Color tabBarColor = Color.fromRGBO(35, 38, 47, 1);
+  static const Color navigationBarColor = Color.fromRGBO(35, 38, 47, 1);
+  static const Color searchBarColor = Color.fromRGBO(15, 20, 30, 1);
 
   /// textColor
   static const Color bodyText1Color = Color.fromRGBO(190, 190, 190, 1);
   static const Color bodyText2Color = Color.fromRGBO(210, 210, 210, 1);
   static const Color subtitle1Color = Color.fromRGBO(210, 210, 210, 1);
   static const Color subtitle2Color = Color.fromRGBO(220, 220, 220, 1);
+
+  /// 分割线color
+  static const Color splitLineColor = Color.fromRGBO(150, 150, 150, 1);
+
+  /// 其他color
+  static const Color white_240_Color = Color.fromRGBO(240, 240, 240, 1);
 
   /// 共有属性
   static const double FontSize10 = 10;

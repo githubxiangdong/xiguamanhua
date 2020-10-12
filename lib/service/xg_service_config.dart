@@ -12,4 +12,13 @@ class XGServiceConfig {
     'Accept-Encoding': 'gzip, deflate',
     'Connection': 'keep-alive',
   };
+
+  static final timestamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+  static Map<String, dynamic> params = {
+    'channel': 'ios',
+    'imei': '6a49ec3bfcc642a58f29f9a10a26bafd',
+    'terminal_model': 'iPhone 11 Pro',
+    'timestamp': timestamp,
+    'version': '3.1.6',
+  };
 }

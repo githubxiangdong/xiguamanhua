@@ -8,9 +8,11 @@ class XGComicsModel {
   String comicsCover = ''; // 漫画封面图
   int comicsSort = 0; // 漫画排名
   int comicsType = 0; // 漫画类型
+  String comicsTypes = ''; // 漫画类型
   String comicsStatus = ''; // 漫画状态
   String comicsUrl = ''; // 漫画站外链接
   String comicsDetailUrl = ''; // 漫画详情链接
+  String lastName = ''; // 最近更新
   Map<String, String> headers = {}; // 图片请求头设置
 
   XGComicsModel({
@@ -23,17 +25,20 @@ class XGComicsModel {
     this.comicsStatus,
     this.comicsUrl,
     this.comicsDetailUrl,
+    this.lastName,
     this.headers,
   });
 
   XGComicsModel.fromJson(Map<String, dynamic> json) {
     comicsId = json['obj_id'] == null ? json['id'] : json['obj_id'];
     comicsName = json['title'] == null ? '' : json['title'];
-    comicsProfile = json['sub_title']== null ? '' : json['sub_title'];
-    comicsCover = json['cover']== null ? '' : json['cover'];
-    comicsType = json['type']== null ? 0 : json['type'];
-    comicsUrl = json['url']== null ? '' : json['url'];
-    comicsStatus = json['status']== null ? '' : json['status'];
+    comicsProfile = json['sub_title'] == null ? '' : json['sub_title'];
+    comicsCover = json['cover'] == null ? '' : json['cover'];
+    comicsType = json['type'] == null ? 0 : json['type'];
+    comicsTypes = json['types'] == null ? '' : json['types'];
+    comicsUrl = json['url'] == null ? '' : json['url'];
+    comicsStatus = json['status'].toString() == null ? '' : json['status'].toString();
+    lastName = json['last_name'] == null ? '' : json['last_name'];
     authors = json['authors'] == null ? '' : json['authors'];
   }
 
