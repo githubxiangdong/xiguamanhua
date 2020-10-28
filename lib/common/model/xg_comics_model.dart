@@ -42,6 +42,19 @@ class XGComicsModel {
     authors = json['authors'] == null ? '' : json['authors'];
   }
 
+  XGComicsModel.fromSql(Map<String, dynamic> json) {
+    this.comicsId = json['columnId'] == null ? 0 : json['columnId'];
+    this.comicsName = json['comicsName'] == null ? '' : json['comicsName'];
+    this.comicsProfile = json['comicsProfile'] == null ? '' : json['comicsProfile'];
+    this.comicsCover = json['comicsCover'] == null ? '' : json['comicsCover'];
+    this.comicsType = json['comicsType'] == null ? 0 : json['comicsType'];
+    this.comicsTypes = json['comicsTypes'] == null? '' : json['comicsTypes'];
+    this.comicsUrl = json['comicsUrl'] == null ? '': json['comicsUrl'];
+    this.comicsStatus = json['comicsStatus'] == null ? '' : json['comicsStatus'];
+    this.lastName = json['lastName'] == null ? '' : json['lastName'];
+    this.authors = json['authors'] == null ? '' : json['authors'];
+  }
+
   // 获取每个漫画的具体信息
   XGComicsModel.fromElement(Element element) {
     final detailList = element.getElementsByTagName('a');
@@ -92,8 +105,23 @@ class XGComicsModel {
     // };
   }
 
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> json = Map<String, dynamic>();
+    json['columnId'] = this.comicsId;
+    json['comicsName'] = this.comicsName;
+    json['comicsProfile'] = this.comicsProfile;
+    json['comicsCover'] = this.comicsCover;
+    json['comicsType'] = this.comicsType;
+    json['comicsTypes'] = this.comicsTypes;
+    json['comicsUrl'] = this.comicsUrl;
+    json['comicsStatus'] = this.comicsStatus;
+    json['lastName'] = this.lastName;
+    json['authors'] = this.authors;
+    return json;
+  }
+
   @override
   String toString() {
-    return 'XGComicsModel{comicsId: $comicsId, comicsName: $comicsName, comicsProfile: $comicsProfile, comicsCover: $comicsCover, comicsSort: $comicsSort, comicsType: $comicsType, comicsStatus: $comicsStatus, comicsUrl: $comicsUrl, comicsDetailUrl: $comicsDetailUrl}';
+    return 'XGComicsModel{comicsId: $comicsId, comicsName: $comicsName, authors: $authors, comicsProfile: $comicsProfile, comicsCover: $comicsCover, comicsSort: $comicsSort, comicsType: $comicsType, comicsTypes: $comicsTypes, comicsStatus: $comicsStatus, comicsUrl: $comicsUrl, comicsDetailUrl: $comicsDetailUrl, lastName: $lastName, headers: $headers}';
   }
 }

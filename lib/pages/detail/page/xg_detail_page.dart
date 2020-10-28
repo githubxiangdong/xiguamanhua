@@ -41,7 +41,7 @@ class _XGDetailPageState extends State<XGDetailPage> {
         title: Text(_detailModel == null ? '' : _detailModel.comicsName),
       ),
       body: _buildDetailLayout(),
-      bottomSheet: XGDetailBottomSheet(widget.model, _detailModel.comicsCover),
+      bottomSheet: XGDetailBottomSheet(widget.model, _detailModel),
     );
   }
 
@@ -73,6 +73,7 @@ class _XGDetailPageState extends State<XGDetailPage> {
   Widget _buildSpaceFill(double space) {
     return SliverToBoxAdapter(
       child: Container(
+        color: Colors.red,
         height: space,
       ),
     );
